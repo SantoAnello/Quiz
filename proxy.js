@@ -5,10 +5,10 @@ export default async (event, context) => {
     const body = JSON.parse(event.body);
 
     const googleResponse = await fetch(
-      "https://script.google.com/macros/s/AKfycbwauTT2Z-7k00JDjb4q6_ZR0q4fGGMW3cNTWcKw_zTT3ecYgC8xWso8AebH-kPjjCgX/exec",
+      'https://script.google.com/macros/s/AKfycbwauTT2Z-7k00JDjb4q6_ZR0q4fGGMW3cNTWcKw_zTT3ecYgC8xWso8AebH-kPjjCgX/exec',
       {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       }
     );
@@ -19,7 +19,7 @@ export default async (event, context) => {
       statusCode: 200,
       body: JSON.stringify(data),
       headers: {
-        "Access-Control-Allow-Origin": "*"
+        'Access-Control-Allow-Origin': '*'
       }
     };
 
