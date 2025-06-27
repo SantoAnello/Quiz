@@ -7,7 +7,7 @@ export default async (event, context) => {
       : event.body;
 
     const googleResponse = await fetch(
-      'https://script.google.com/macros/s/AKfycbwauTT2Z-7k00JDjb4q6_ZR0q4fGGMW3cNTWcKw_zTT3ecYgC8xWso8AebH-kPjjCgX/exec',
+      'https://script.google.com/macros/s/AKfycbwWME98bzBYykv6x2E82Fq-cwurGN4ObeCIrE4U6QYAN0tXNbsXUfWXEEbJIqPbMYgh/exec',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
