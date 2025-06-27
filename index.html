@@ -914,29 +914,32 @@ function showResult() {
     }
 
     calculateScore();
-    const nome = nameInput.value.trim();
-    const email = emailInput.value.trim();
-    const whatsapp = whatsappInput.value.trim();
 
-    fetch('https://script.google.com/macros/s/AKfycbwauTT2Z-7k00JDjb4q6_ZR0q4fGGMW3cNTWcKw_zTT3ecYgC8xWso8AebH-kPjjCgX/exec', {
-      method: 'POST',
-      body: JSON.stringify({
-        nome,
-        email,
-        whatsapp,
-        pontuacao: totalScore
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log('Lead salvo com sucesso:', data);
-    })
-    .catch(err => {
-      console.error('Erro ao enviar lead:', err);
-    });
+
+const nome = nameInput.value.trim();
+const email = emailInput.value.trim();
+const whatsapp = whatsappInput.value.trim();
+
+fetch('/.netlify/functions/proxy', {
+  method: 'POST',
+  body: JSON.stringify({
+    nome,
+    email,
+    whatsapp,
+    pontuacao: totalScore
+  }),
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+.then(res => res.json())
+.then(data => {
+  console.log('Lead salvo com sucesso:', data);
+})
+.catch(err => {
+  console.error('Erro ao enviar lead:', err);
+});
+
 
 
     leadFormContainer.classList.remove('active');
