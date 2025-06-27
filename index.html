@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Qual o Nível de Blindagem do Seu Casamento?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .quiz-content {
+            padding: 40px 30px;
+        }
+
+        .question-container, .lead-form-container {
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .question-container.active, .lead-form-container.active {
+            display: block;
+        }
+
+        .question-number {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .question {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .option:hover {
+            background: #e3f2fd;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .option input[type="radio"] {
+            display: none;
+        }
+
+        .option-text {
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .result-container {
+            display: none;
+            text-align: center;
+            padding: 40px 30px;
+        }
+
+        .result-container.active {
+            display: block;
+        }
+
+        .score-display {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .level-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        .diagnosis {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .diagnosis h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .diagnosis p {
+            line-height: 1.6;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .action-plan {
+            background: #e8f5e8;
+            border-left: 5px solid #28a745;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .action-plan h3 {
+            color: #28a745;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .action-plan ol {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .action-plan li {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .cta-section h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .cta-section p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background: white;
+            color: #ff6b6b;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .restart-btn {
+            background: #6c757d;
+            margin-top: 20px;
+        }
+
+        .restart-btn:hover {
+            background: #5a6268;
+        }
+
+        .lead-form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .lead-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .lead-form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .lead-form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .quiz-content {
+                padding: 30px 20px;
+            }
+
+            .question {
+                font-size: 1.2em;
+            }
+
+            .option {
+                padding: 15px;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ Quiz: Qual o Nível de Blindagem do Seu Casamento?</h1>
+            <p>Descubra o quão protegido está seu relacionamento e receba um plano personalizado!</p>
+        </div>
+
+        <div class="quiz-content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- Perguntas do Quiz -->
+            <div class="question-container active" data-question="1">
+                <div class="question-number">Pergunta 1 de 15</div>
+                <div class="question">Com que frequência você e seu cônjuge conversam sobre seus sentimentos mais profundos e preocupações?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q1" value="3">
+                        <div class="option-text">Diariamente, com abertura e sinceridade.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="2">
+                        <div class="option-text">Algumas vezes por semana, mas nem sempre com profundidade.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="1">
+                        <div class="option-text">Raramente, evitamos assuntos mais delicados.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="0">
+                        <div class="option-text">Quase nunca, cada um vive sua vida.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-container" data-question="2">
+                <div class="question-number">Pergunta 2 de 15</div>
+                <div class="question">Quando surge um desentendimento, como vocês geralmente o abordam?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q2" value="3">
+                        <div class="option-text">Conversamos abertamente, buscando entender o ponto de vista um do outro e encontrar uma solução.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="2">
+                        <div class="option-text">Tentamos conversar, mas às vezes a discussão se acalora e não chegamos a uma conclusão.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="1">
+                        <div class="option-text">Um de nós se cala ou evita o assunto para não gerar mais conflito.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="0">
+                        <div class="option-text">As discussões são frequentes e raramente resolvemos algo.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-container" data-question="3">
+                <div class="question-number">Pergunta 3 de 15</div>
+                <div class="question">Você se sente verdadeiramente ouvido(a) e compreendido(a) pelo seu cônjuge?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q3" value="3">
+                        <div class="option-text">Sim, na maioria das vezes sinto que ele/ela me escuta com atenção e empatia.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="2">
+                        <div class="option-text">Às vezes sim, às vezes não. Depende do assunto ou do momento.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="1">
+                        <div class="option-text">Raramente. Sinto que ele/ela não me entende ou não se importa.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="0">
+                        <div class="option-text">Não, sinto que falo sozinho(a) ou que minhas palavras são ignoradas.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-container" data-question="4">
+                <div class="question-number">Pergunta 4 de 15</div>
+                <div class="question">Vocês oram juntos ou compartilham momentos de fé como casal?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q4" value="3">
+                        <div class="option-text">Sim, é uma prática regular e essencial em nosso casamento.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q4" value="2">
+                        <div class="option-text">Às vezes, em momentos específicos ou de necessidade.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q4" value="1">
+                        <div class="option-text">Raramente, cada um tem sua fé individual.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q4" value="0">
+                        <div class="option-text">Não, a fé não é um pilar em nosso relacionamento.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-container" data-question="5">
+                <div class="question-number">Pergunta 5 de 15</div>
+                <div class="question">A fé é um tema presente nas conversas e decisões do dia a dia do seu casamento?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q5" value="3">
+                        <div class="option-text">Sim, buscamos a orientação de Deus em todas as áreas da nossa vida a dois.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q5" value="2">
+                        <div class="option-text">Em algumas situações importantes, sim.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q5" value="1">
+                        <div class="option-text">Raramente, a fé é mais uma questão pessoal.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q5" value="0">
+                        <div class="option-text">Não, a fé não influencia nossas decisões como casal.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-container" data-question="6">
+                <div class="question-number">Pergunta 6 de 15</div>
+                <div class="question">Vocês buscam juntos o crescimento espiritual (ex: participam de grupos de oração, estudam a Bíblia, vão à missa/culto regularmente)?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q6" value="3">
+                        <div class="option-text">Sim, ativamente buscamos crescer juntos na fé.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q6" value="2">
+                        <div class="option-text">Um de nós busca mais que o outro, ou fazemos isso esporadicamente.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q6" value="1">
+                        <div class="option-text">Raramente, cada um tem sua própria jornada espiritual.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q6" value="0">
+                        <div class="option-text">Não temos interesse em crescimento espiritual conjunto.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-container" data-question="7">
+                <div class="question-number">Pergunta 7 de 15</div>
+                <div class="question">Com que frequência vocês demonstram carinho e afeto um pelo outro (abraços, beijos, palavras de afirmação)?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q7" value="3">
+                        <div class="option-text">Diariamente, com gestos e palavras que fortalecem nossa conexão.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q7" value="2">
+                        <div class="option-text">Algumas vezes por semana, mas poderíamos ser mais intencionais.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q7" value="1">
+                        <div class="option-text">Raramente, somos mais práticos e menos demonstrativos.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q7" value="0">
+                        <div class="option-text">Quase nunca, o carinho não é uma prioridade em nosso dia a dia.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-container" data-question="8">
+                <div class="question-number">Pergunta 8 de 15</div>
+                <div class="question">Vocês dedicam tempo de qualidade um ao outro, sem distrações (celular, TV, trabalho)?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q8" value="3">
+                        <div class="option-text">Sim, temos momentos regulares e intencionais para nós dois.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q8" value="2">
+                        <div class="option-text">Às vezes, mas é difícil conciliar com a rotina e as responsabilidades.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q8" value="1">
+                        <div class="option-text">Raramente, estamos sempre ocupados ou distraídos.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q8" value="0">
+                        <div class="option-text">Não, cada um tem seus próprios interesses e atividades.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-container" data-question="9">
+                <div class="question-number">Pergunta 9 de 15</div>
+                <div class="question">Vocês se sentem à vontade para compartilhar seus desejos e necessidades íntimas um com o outro?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q9" value="3">
+                        <div class="option-text">Sim, nossa intimidade é aberta e satisfatória para ambos.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q9" value="2">
+                        <div class="option-text">Em parte, mas há aspectos que ainda precisam ser melhorados.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q9" value="1">
+                        <div class="option-text">Raramente, a intimidade é um tabu ou fonte de desconforto.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q9" value="0">
+                        <div class="option-text">Não, nossa vida íntima é inexistente ou insatisfatória.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-container" data-question="10">
+                <div class="question-number">Pergunta 10 de 15</div>
+                <div class="question">Quando há um conflito, vocês conseguem perdoar e seguir em frente sem guardar ressentimentos?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q10" value="3">
+                        <div class="option-text">Sim, o perdão é uma prática constante e essencial em nosso casamento.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q10" value="2">
+                        <div class="option-text">Na maioria das vezes, mas às vezes o ressentimento persiste por um tempo.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q10" value="1">
+                        <div class="option-text">Raramente, temos dificuldade em perdoar e esquecer.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q10" value="0">
+                        <div class="option-text">Não, os ressentimentos se acumulam e afetam nosso relacionamento.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-container" data-question="11">
+                <div class="question-number">Pergunta 11 de 15</div>
+                <div class="question">Vocês conseguem resolver os problemas e tomar decisões importantes juntos, de forma colaborativa?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q11" value="3">
+                        <div class="option-text">Sim, trabalhamos em equipe e respeitamos as opiniões um do outro.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q11" value="2">
+                        <div class="option-text">Na maioria das vezes, mas um de nós tende a dominar as decisões.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q11" value="1">
+                        <div class="option-text">Raramente, há muita divergência e dificuldade em chegar a um consenso.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q11" value="0">
+                        <div class="option-text">Não, cada um toma suas próprias decisões, ou há muitas brigas.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-container" data-question="12">
+                <div class="question-number">Pergunta 12 de 15</div>
+                <div class="question">Vocês buscam ajuda externa (terapia, aconselhamento, mentoria) quando enfrentam dificuldades que não conseguem resolver sozinhos?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q12" value="3">
+                        <div class="option-text">Sim, acreditamos na importância de buscar apoio profissional ou espiritual.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q12" value="2">
+                        <div class="option-text">Consideramos, mas ainda não demos o passo.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q12" value="1">
+                        <div class="option-text">Raramente, preferimos resolver tudo entre nós.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q12" value="0">
+                        <div class="option-text">Não, acreditamos que buscar ajuda é sinal de fraqueza.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-container" data-question="13">
+                <div class="question-number">Pergunta 13 de 15</div>
+                <div class="question">Vocês estão cientes das influências externas (amigos, família, redes sociais, cultura) que podem afetar negativamente seu casamento?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q13" value="3">
+                        <div class="option-text">Sim, e ativamente protegemos nosso relacionamento dessas influências.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q13" value="2">
+                        <div class="option-text">Em parte, mas nem sempre conseguimos nos blindar totalmente.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q13" value="1">
+                        <div class="option-text">Raramente pensamos nisso, ou não vemos problema.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q13" value="0">
+                        <div class="option-text">Não, não acreditamos que influências externas afetem nosso casamento.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-container" data-question="14">
+                <div class="question-number">Pergunta 14 de 15</div>
+                <div class="question">Vocês têm um plano ou estratégias para lidar com as tentações e desafios que surgem no casamento (ex: infidelidade, vícios, problemas financeiros)?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q14" value="3">
+                        <div class="option-text">Sim, conversamos abertamente e temos estratégias claras para enfrentar esses desafios.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q14" value="2">
+                        <div class="option-text">Em parte, mas não temos um plano formal.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q14" value="1">
+                        <div class="option-text">Raramente pensamos nisso, ou lidamos com eles quando surgem.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q14" value="0">
+                        <div class="option-text">Não, acreditamos que esses problemas não nos afetarão.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-container" data-question="15">
+                <div class="question-number">Pergunta 15 de 15</div>
+                <div class="question">Você acredita que há uma batalha espiritual real acontecendo pelo seu casamento?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q15" value="3">
+                        <div class="option-text">Sim, e estamos vigilantes e preparados para combatê-la com fé.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q15" value="2">
+                        <div class="option-text">Talvez, mas não damos muita atenção a isso.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q15" value="1">
+                        <div class="option-text">Não, acredito que os problemas são apenas humanos.</div>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q15" value="0">
+                        <div class="option-text">Não sei, nunca pensei sobre isso.</div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Formulário de Captura de Leads -->
+            <div class="lead-form-container" id="leadFormContainer">
+                <h2 class="question">Para receber seu diagnóstico e plano de ação personalizado, preencha seus dados:</h2>
+                <div class="lead-form-group">
+                    <label for="name">Nome:</label>
+                    <input type="text" id="name" placeholder="Seu nome" required>
+                </div>
+                <div class="lead-form-group">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" placeholder="seu.email@exemplo.com" required>
+                </div>
+                <div class="lead-form-group">
+                    <label for="whatsapp">WhatsApp (com DDD):</label>
+                    <input type="tel" id="whatsapp" placeholder="(XX) XXXXX-XXXX" pattern="[0-9]{2}[0-9]{5}[0-9]{4}" title="Formato: (XX) XXXXX-XXXX" required>
+                </div>
+                <button class="btn" id="submitLeadFormBtn" disabled>Ver Resultado</button>
+            </div>
+
+            <!-- Resultado do Quiz -->
+            <div class="result-container" id="resultContainer">
+                <h2 class="level-title" id="levelTitle"></h2>
+                <p class="score-display">Seu Resultado: <span id="finalScore"></span>/45</p>
+
+                <div class="diagnosis">
+                    <h3><span role="img" aria-label="Diagnóstico">📋</span> Diagnóstico</h3>
+                    <p id="diagnosisText"></p>
+                </div>
+
+                <div class="action-plan">
+                    <h3><span role="img" aria-label="Plano de Ação">💡</span> Plano de Ação</h3>
+                    <ol id="actionPlanList"></ol>
+                </div>
+
+                <div class="cta-section">
+                    <h3>Não deixe as brechas se tornarem abismos!</h3>
+                    <p>O ebook 'Carta de um diabo para um marido' é a ferramenta que você precisa para identificar e combater as estratégias que tentam minar seu casamento. Invista no seu amor!</p>
+                    <a href="https://mpsantiagoo.hotmart.host/pagina-de-vendas-fe22e41a-6618-4d4c-beb1-031b04cf47e1" class="cta-button" target="_blank">Garanta Seu Ebook Agora!</a>
+                </div>
+
+
+<div class="letter-suggestion" id="letterSuggestion" style="margin-top: 30px; display: none;">
+    <h3 style="color:#764ba2; font-size:1.5em; margin-bottom:10px;">📖 Leitura recomendada</h3>
+    <p id="letterSuggestionText" style="font-size:1.1em; line-height:1.6;"></p>
+</div>
+
+
+                <button class="btn restart-btn" id="restartQuizBtn">Refazer o Quiz</button>
+            </div>
+
+            <!-- Navegação -->
+            <div class="navigation" id="navigationButtons">
+                <button class="btn" id="prevBtn" style="display: none;">Anterior</button>
+                <button class="btn" id="nextBtn">Próxima</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = document.querySelectorAll('.question-container');
+        const leadFormContainer = document.getElementById('leadFormContainer');
+        const resultContainer = document.getElementById('resultContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitLeadFormBtn = document.getElementById('submitLeadFormBtn');
+        const restartQuizBtn = document.getElementById('restartQuizBtn');
+        const progressFill = document.getElementById('progressFill');
+        const finalScoreSpan = document.getElementById('finalScore');
+        const levelTitle = document.getElementById('levelTitle');
+        const diagnosisText = document.getElementById('diagnosisText');
+        const actionPlanList = document.getElementById('actionPlanList');
+
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const whatsappInput = document.getElementById('whatsapp');
+
+        let currentQuestion = 0;
+        let totalScore = 0;
+
+        // Store selected answers
+        const selectedAnswers = {};
+
+        function updateProgress() {
+            const progress = (currentQuestion / questions.length) * 100;
+            progressFill.style.width = `${progress}%`;
+        }
+
+        function showQuestion(index) {
+            questions.forEach((q, i) => {
+                q.classList.remove('active');
+                if (i === index) {
+                    q.classList.add('active');
+                }
+            });
+            leadFormContainer.classList.remove('active');
+            resultContainer.classList.remove('active');
+            updateNavigation();
+            updateProgress();
+        }
+
+        function updateNavigation() {
+            prevBtn.style.display = currentQuestion === 0 ? 'none' : 'inline-block';
+
+            // Logic for the 'Next' button or 'See Result' button
+            if (currentQuestion === questions.length - 1) {
+                // On the last question, change 'Next' to 'Ver Resultado' and show lead form on click
+                nextBtn.textContent = 'Ver Resultado';
+                nextBtn.removeEventListener('click', nextQuestion);
+                nextBtn.addEventListener('click', showLeadForm);
+                // Enable/disable 'Ver Resultado' button based on answer selection for the last question
+                const currentQ = questions[currentQuestion];
+                const selectedOption = currentQ.querySelector('input[type="radio"]:checked');
+                nextBtn.disabled = !selectedOption;
+            } else {
+                // For other questions, it's a 'Next' button
+                nextBtn.textContent = 'Próxima';
+                nextBtn.removeEventListener('click', showLeadForm); // Ensure old listener is removed
+                nextBtn.addEventListener('click', nextQuestion);
+                // Enable/disable 'Próxima' button based on answer selection
+                const currentQ = questions[currentQuestion];
+                const selectedOption = currentQ.querySelector('input[type="radio"]:checked');
+                nextBtn.disabled = !selectedOption;
+            }
+        }
+
+        function nextQuestion() {
+            const currentQ = questions[currentQuestion];
+            const selectedOption = currentQ.querySelector('input[type="radio"]:checked');
+
+            if (selectedOption) {
+                selectedAnswers[`q${currentQuestion + 1}`] = parseInt(selectedOption.value);
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    showQuestion(currentQuestion);
+                } else {
+                    // This else block should ideally not be reached if updateNavigation is correct
+                    // but as a fallback, it will show the lead form
+                    showLeadForm();
+                }
+            } else {
+                alert('Por favor, selecione uma opção para continuar.');
+            }
+        }
+
+        function prevQuestion() {
+            // If currently on the lead form, go back to the last question
+            if (leadFormContainer.classList.contains('active')) {
+                leadFormContainer.classList.remove('active');
+                showQuestion(questions.length - 1);
+                // Re-attach the showLeadForm listener to nextBtn for the last question
+                nextBtn.textContent = 'Ver Resultado';
+                nextBtn.removeEventListener('click', nextQuestion);
+                nextBtn.addEventListener('click', showLeadForm);
+            } else if (resultContainer.classList.contains('active')) {
+                // If currently on the result page, go back to the lead form
+                resultContainer.classList.remove('active');
+                showLeadForm();
+            } else {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function showLeadForm() {
+            // Ensure all questions are answered before showing lead form
+            for (let i = 0; i < questions.length; i++) {
+                const q = questions[i];
+                const selectedOption = q.querySelector('input[type="radio"]:checked');
+                if (!selectedOption) {
+                    alert('Por favor, responda a todas as perguntas antes de continuar.');
+                    showQuestion(i); // Go back to the unanswered question
+                    return;
+                }
+                // Store answer if not already stored (important if user navigates back and forth)
+                if (!selectedAnswers[`q${i + 1}`]) {
+                    selectedAnswers[`q${i + 1}`] = parseInt(selectedOption.value);
+                }
+            }
+
+            questions.forEach(q => q.classList.remove('active'));
+            resultContainer.classList.remove('active');
+            leadFormContainer.classList.add('active');
+
+            // Adjust navigation buttons for lead form
+            prevBtn.style.display = 'inline-block';
+            prevBtn.removeEventListener('click', prevQuestion);
+            prevBtn.addEventListener('click', prevQuestion); // Re-add to handle going back to last question
+
+            nextBtn.style.display = 'none'; // Hide 'Next' button on lead form
+            submitLeadFormBtn.style.display = 'inline-block';
+            checkLeadFormInputs(); // Check initial state of lead form inputs
+        }
+
+        function checkLeadFormInputs() {
+            const nameFilled = nameInput.value.trim() !== '';
+            const emailFilled = emailInput.value.trim() !== '';
+            const whatsappFilled = whatsappInput.value.trim() !== '';
+            submitLeadFormBtn.disabled = !(nameFilled && emailFilled && whatsappFilled);
+        }
+
+        nameInput.addEventListener('input', checkLeadFormInputs);
+        emailInput.addEventListener('input', checkLeadFormInputs);
+        whatsappInput.addEventListener('input', checkLeadFormInputs);
+
+        submitLeadFormBtn.addEventListener('click', showResult);
+
+        function calculateScore() {
+            totalScore = 0;
+            for (const qNum in selectedAnswers) {
+                totalScore += selectedAnswers[qNum];
+            }
+        }
+
+function showResult() {
+    if (submitLeadFormBtn.disabled) {
+        alert('Por favor, preencha todos os campos para ver o resultado.');
+        return;
+    }
+
+    calculateScore();
+    const nome = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const whatsapp = whatsappInput.value.trim();
+
+    fetch('https://script.google.com/macros/s/AKfycbwauTT2Z-7k00JDjb4q6_ZR0q4fGGMW3cNTWcKw_zTT3ecYgC8xWso8AebH-kPjjCgX/exec', {
+      method: 'POST',
+      body: JSON.stringify({
+        nome,
+        email,
+        whatsapp,
+        pontuacao: totalScore
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log('Lead salvo com sucesso:', data);
+    })
+    .catch(err => {
+      console.error('Erro ao enviar lead:', err);
+    });
+
+
+    leadFormContainer.classList.remove('active');
+    questions.forEach(q => q.classList.remove('active'));
+    resultContainer.classList.add('active');
+
+    finalScoreSpan.textContent = totalScore;
+
+    let level = '';
+    let diagnosis = '';
+    let actionPlan = [];
+
+    if (totalScore >= 0 && totalScore <= 15) {
+        level = 'Nível Crítico - Casamento em Risco! 🚨';
+        diagnosis = 'Seu casamento está em uma situação delicada e requer atenção imediata. Há muitas brechas que o deixam extremamente vulnerável a ataques e desentendimentos profundos. É crucial agir agora para evitar maiores danos.';
+        actionPlan = [
+            'Busquem ajuda profissional: Considerem terapia de casal ou aconselhamento espiritual urgente.',
+            'Comunicação Zero: Dediquem um tempo diário para conversar sobre o dia, os sentimentos e as expectativas, sem julgamentos.',
+            'Reavaliem a fé: Busquem momentos de oração e reflexão em casal, e se reconectem com os princípios que uniram vocês.',
+            'Invistam em Tempo de Qualidade: Criem uma rotina para estarem juntos, sem distrações, nem que seja por 15 minutos ao dia.'
+        ];
+    } else if (totalScore >= 16 && totalScore <= 30) {
+        level = 'Nível Baixo - Atenção Urgente! ⚠️';
+        diagnosis = 'Seu casamento possui algumas fragilidades que o deixam suscetível a ataques. Há pontos importantes a serem trabalhados, especialmente na comunicação e na conexão espiritual. Pequenas brechas podem se tornar grandes problemas se não forem tratadas a tempo.';
+        actionPlan = [
+            'Melhore a Comunicação: Dediquem tempo para conversar sobre o dia, os sentimentos e as expectativas.',
+            'Fortaleçam a Fé: Busquem momentos de oração e reflexão em casal.',
+            'Invistam em Tempo de Qualidade: Criem uma rotina para estarem juntos, sem distrações.',
+            'Conheça as Táticas: Entenda como as influências externas podem afetar seu relacionamento.'
+        ];
+    } else if (totalScore >= 31 && totalScore <= 37) {
+        level = 'Nível Médio - Há Espaço para Melhorar! 📈';
+        diagnosis = 'Seu casamento está em um bom caminho, com bases sólidas, mas ainda há áreas que podem ser fortalecidas. Pequenos ajustes e uma atenção contínua podem elevar o nível de blindagem e prevenir futuros problemas.';
+        actionPlan = [
+            'Aprofundem a Comunicação: Pratiquem a escuta ativa e a empatia, buscando entender verdadeiramente o outro.',
+            'Cultivem a Fé: Busquem juntos aprofundar a fé, participando de atividades religiosas ou estudando a palavra.',
+            'Inovem na Intimidade: Explorem novas formas de demonstrar carinho e afeto, e de passar tempo de qualidade juntos.',
+            'Estejam Vigilantes: Mantenham-se atentos às influências externas e tentações, protegendo seu relacionamento.'
+        ];
+    } else {
+        level = 'Nível Alto - Casamento Forte e Protegido! 🏆';
+        diagnosis = 'Parabéns! Seu casamento demonstra um alto nível de blindagem. Vocês construíram uma base sólida de comunicação, fé, intimidade e resiliência. Continuem cultivando esses pilares para manter o relacionamento forte e inabalável.';
+        actionPlan = [
+            'Mantenham a Intencionalidade: Não deixem a rotina esfriar o relacionamento. Continuem investindo tempo e esforço.',
+            'Sejam Mentores: Compartilhem suas experiências e ajudem outros casais a fortalecerem seus relacionamentos.',
+            'Aprofundem a Fé: Busquem sempre mais conhecimento e vivência espiritual em casal.',
+            'Celebrem as Vitórias: Reconheçam e celebrem as conquistas e os momentos felizes do casamento.'
+        ];
+    }
+
+    levelTitle.textContent = level;
+    diagnosisText.textContent = diagnosis;
+    actionPlanList.innerHTML = '';
+    actionPlan.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        actionPlanList.appendChild(li);
+    });
+
+    // SUGESTÃO DE CARTAS DO E-BOOK
+    const letterSuggestion = document.getElementById('letterSuggestion');
+    const letterSuggestionText = document.getElementById('letterSuggestionText');
+    let suggestion = '';
+
+    if (totalScore >= 0 && totalScore <= 15) {
+        suggestion = '📖 Leia as Cartas 1, 4 e 5 — elas vão abrir seus olhos para as raízes dos problemas e distorções mais profundas.';
+    } else if (totalScore >= 16 && totalScore <= 30) {
+        suggestion = '📖 Leia as Cartas 3, 6 e 12 — elas ajudam a compreender o que está minando a conexão emocional e espiritual do casal.';
+    } else if (totalScore >= 31 && totalScore <= 37) {
+        suggestion = '📖 Leia as Cartas 7, 9 e 10 — elas mostram como a rotina, o cansaço e a distração podem sabotar um casamento saudável.';
+    } else {
+        suggestion = '📖 Leia as Cartas 14 e 15 — elas reforçam como o perdão e a santidade a dois são chaves para proteger o matrimônio.';
+    }
+
+    letterSuggestionText.textContent = suggestion;
+    letterSuggestion.style.display = 'block';
+
+    // Oculta botões de navegação
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
+    submitLeadFormBtn.style.display = 'none';
+}
+
+
+        // Event Listeners for radio buttons
+        questions.forEach(q => {
+            q.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', (event) => {
+                    // Remove 'selected' class from all options in this question
+                    q.querySelectorAll('.option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    // Add 'selected' class to the parent label of the checked radio
+                    event.target.closest('.option').classList.add('selected');
+                    // Store the answer immediately when selected
+                    const questionIndex = parseInt(q.dataset.question);
+                    selectedAnswers[`q${questionIndex}`] = parseInt(event.target.value);
+                    updateNavigation(); // Re-check button state after selection
+                });
+            });
+        });
+
+        nextBtn.addEventListener('click', nextQuestion);
+        prevBtn.addEventListener('click', prevQuestion);
+        restartQuizBtn.addEventListener('click', () => {
+            currentQuestion = 0;
+            totalScore = 0;
+            for (const key in selectedAnswers) {
+                delete selectedAnswers[key];
+            }
+            questions.forEach(q => {
+                q.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.checked = false;
+                });
+                q.querySelectorAll('.option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+            });
+            showQuestion(currentQuestion);
+            submitLeadFormBtn.disabled = true; // Disable submit button on restart
+            nextBtn.style.display = 'inline-block'; // Ensure next button is visible
+            // Reset next button event listener and text
+            nextBtn.textContent = 'Próxima';
+            nextBtn.removeEventListener('click', showLeadForm);
+            nextBtn.addEventListener('click', nextQuestion);
+            prevBtn.style.display = 'none';
+
+            // Clear lead form inputs
+            nameInput.value = '';
+            emailInput.value = '';
+            whatsappInput.value = '';
+        });
+
+        // Initial setup
+        showQuestion(currentQuestion);
+    </script>
+</body>
+</html>
+
