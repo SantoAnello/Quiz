@@ -1,19 +1,19 @@
 import fetch from 'node-fetch';
 
-export default async (event, context) => {
-  try {
-    const body = event.body && typeof event.body === "string"
-      ? JSON.parse(event.body)
-      : event.body;
+export async function handler(event, context) {
+  const response = await fetch("https://script.google.com/macros/s/AKfycbwWME98bzBYykv6x2E82Fq-cwurGN4ObeCIrE4U6QYAN0tXNbsXUfWXEEbJIqPbMYgh/exec", {
+    method: "POST",
+    body: event.body,
+    headers: { "Content-Type": "application/json" }
+  });
 
-    const googleResponse = await fetch(
-      'https://script.google.com/macros/s/AKfycbxJbqK3GJJ2RmDVavTiEtzJ_gkcVmJZW_hQ4zxShOWGbZ24b7FZ4MEY6_9Oszqi1ErK/exec',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      }
-    );
+  const data = await response.json();
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(data),
+  };
+}
 
     const data = await googleResponse.json();
 
