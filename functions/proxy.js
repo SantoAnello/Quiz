@@ -1,8 +1,11 @@
 import fetch from 'node-fetch';
 
-export default async (req, res) => {
+export default async (req, context) => {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method Not Allowed' });
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: 'Method Not Allowed' }),
+    };
   }
 
   try {
@@ -11,15 +14,22 @@ export default async (req, res) => {
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(req.body)
+        body: JSON.stringify(req.body),
       }
     );
 
     const result = await response.json();
-    return res.status(200).json(result);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result),
+    };
 
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: 'Erro ao enviar dados ao Google Apps Script.' });
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Erro ao enviar dados ao Google Apps Script.' }),
+    };
   }
 };
