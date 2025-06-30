@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
-export default async (req, context) => {
-  if (req.method !== 'POST') {
+export async function handler(event, context) {
+  if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
       body: JSON.stringify({ error: 'Method Not Allowed' }),
@@ -9,12 +9,14 @@ export default async (req, context) => {
   }
 
   try {
+    const body = JSON.parse(event.body);
+
     const response = await fetch(
       'https://script.google.com/macros/s/AKfycbzt2OV0bMY3KFvDS9iSRef7qW4Ak5FE4209wtWMy780THclhYVK4Y5aLd-Bys-vH9M7/exec',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(req.body),
+        body: JSON.stringify(body),
       }
     );
 
@@ -32,4 +34,4 @@ export default async (req, context) => {
       body: JSON.stringify({ error: 'Erro ao enviar dados ao Google Apps Script.' }),
     };
   }
-};
+}
