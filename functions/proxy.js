@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 export default async (event, context) => {
   try {
     const response = await fetch(
-      "https://script.google.com/macros/s/AKfycbxnGXCh1yUR7yF96eFC41fVlkT_xSqs7S5TPtx0B8G-r7ItlhAYosRLHXcdurGfCjLaJw/exec",
+      "https://script.google.com/macros/s/AKfycbzt2OV0bMY3KFvDS9iSRef7qW4Ak5FE4209wtWMy780THclhYVK4Y5aLd-Bys-vH9M7/exec",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
